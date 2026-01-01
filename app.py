@@ -10,6 +10,68 @@ from rag_rag_chain import rag_answer
 
 st.set_page_config(page_title="Company RAG Chatbot (Perplexity)", layout="wide")
 
+st.markdown(
+    """
+    <style>
+    /* App background */
+    .stApp {
+        background-color: #A9D5FF;
+        color: #000000;
+        font-family: monospace;
+    }
+
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #F9FCFF;
+    }
+
+    /* Buttons */
+    .stButton > button {
+        background-color: #F5B8B8;
+        color: #000000;
+        border-radius: 8px;
+        border: none;
+        font-family: monospace;
+    }
+
+    .stButton > button:hover {
+        background-color: #f3a7a7;
+        color: #000000;
+    }
+
+    /* File uploader */
+    .stFileUploader {
+        background-color: #F9FCFF;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    /* Chat input */
+    textarea {
+        background-color: #F9FCFF !important;
+        color: #000000 !important;
+        font-family: monospace !important;
+    }
+
+    /* Chat messages */
+    .stChatMessage {
+        background-color: #F9FCFF;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 8px;
+    }
+
+    /* Expander */
+    details {
+        background-color: #F9FCFF;
+        border-radius: 8px;
+        padding: 8px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 
