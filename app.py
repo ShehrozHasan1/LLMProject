@@ -80,7 +80,7 @@ with st.sidebar:
 
                 st.success(f"Ingestion completed. Stored {total_chunks} chunks in ChromaDB.")
 
-st.subheader("Step 3: Ask questions (answers come only from your documents)")
+st.subheader("Step 3: Ask questions (uses your documents when relevant)")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
