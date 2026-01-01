@@ -47,3 +47,16 @@ def query_chunks(query: str, k: int = 5) -> List[Dict]:
     for d, m, dist in zip(docs, metas, dists):
         out.append({"text": d, "meta": m, "distance": dist})
     return out
+
+# ... keep existing imports and functions ...
+
+def get_doc_count() -> int:
+    """
+    Returns how many chunks (documents) exist in the Chroma collection.
+    Used to decide whether we need auto-ingestion.
+    """
+    col = get_collection()
+    try:
+        return col.count()
+    except Exception:
+        return 0
