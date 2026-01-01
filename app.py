@@ -16,14 +16,14 @@ os.makedirs(DATA_DIR, exist_ok=True)
 st.title("Chatbot by Muhammad Shehroz")
 
 with st.sidebar:
-    st.header("Step 1: Upload company documents")
+    st.header("Step 1: Upload file/documents")
     uploaded_files = st.file_uploader(
         "Upload PDF or DOCX",
         type=["pdf", "docx"],
         accept_multiple_files=True,
     )
 
-    st.caption("Step 2: Click ingest to build/update the vector database.")
+    st.caption("Step 2: Click ingest to build/update.")
 
     if st.button("Ingest uploaded documents"):
         if not uploaded_files:
