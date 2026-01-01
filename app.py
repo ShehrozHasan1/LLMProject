@@ -19,7 +19,7 @@ st.title("Company RAG Chatbot — Perplexity API (RAG)")
 # AUTO-INGEST (from repo PDF)
 # -----------------------------
 DEFAULT_PDF_NAME = "Company-Profile.pdf"
-DEFAULT_PDF_PATH = os.path.join(PROJECT_DIR, DEFAULT_PDF_NAME)
+DEFAULT_PDF_PATH = os.path.join(os.path.dirname(__file__), DEFAULT_PDF_NAME)
 
 def ingest_file(path: str, display_name: str):
     text, _ = load_document(path)
