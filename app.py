@@ -27,7 +27,7 @@ def ingest_file(path: str, display_name: str):
         st.warning(f"No text extracted from: {display_name}")
         return 0
 
-    base_meta = {"source": display_name, "page": None}
+    base_meta = {"source": display_name, "page": ""}
     chunks, metas = chunk_text(
         text=text,
         base_metadata=base_meta,
