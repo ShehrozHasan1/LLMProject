@@ -27,8 +27,22 @@ def get_collection():
 
 
 def upsert_chunks(chunks: List[str], metadatas: List[Dict], ids: List[str]) -> None:
+    # Chroma metadata values must be str/int/float/bool (not None, not dict/list)
+    clean_metas: List[Dict] = []
+    for m in metadatas:
+        mm = {}
+        for k, v in (m or {}).items():
+            if v is None:
+                mm[k] = ""
+            elif isinstance(v, (str, int, float, bool)):
+                mm[k] = v
+            else:
+                # convert anything else to string to avoid crashing
+                mm[k] = str(v)
+        clean_metas.append(mm)
+
     col = get_collection()
-    col.upsert(documents=chunks, metadatas=metadatas, ids=ids)
+    col.upsert(documents=chunks, metadatas=clean_metas, ids=ids)
 
 
 def query_chunks(query: str, k: int = 5) -> List[Dict]:
@@ -48,13 +62,13 @@ def query_chunks(query: str, k: int = 5) -> List[Dict]:
         out.append({"text": d, "meta": m, "distance": dist})
     return out
 
-# ... keep existing imports and functions ...
+
+def query_similar(query: str, k: int = 5) -> List[Dict]:
+    """Alias used by rag_rag_chain.py"""
+    return query_chunks(query, k=k)
+
 
 def get_doc_count() -> int:
-    """
-    Returns how many chunks (documents) exist in the Chroma collection.
-    Used to decide whether we need auto-ingestion.
-    """
     col = get_collection()
     try:
         return col.count()
