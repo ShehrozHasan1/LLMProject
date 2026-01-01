@@ -13,7 +13,7 @@ st.set_page_config(page_title="Company RAG Chatbot (Perplexity)", layout="wide")
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 
-st.title("Company RAG Chatbot — Perplexity API (RAG)")
+st.title("Chatbot by Muhammad Shehroz")
 
 with st.sidebar:
     st.header("Step 1: Upload company documents")
