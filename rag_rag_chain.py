@@ -6,7 +6,7 @@ from rag_vectorstore import query_similar
 # Tune this:
 # Lower distance = more similar. Typical good matches are often < 1.0 depending on embeddings.
 # Start with 1.0 then tune (0.8 stricter, 1.2 looser).
-RAG_DISTANCE_THRESHOLD = 1.3
+RAG_DISTANCE_THRESHOLD = 1.5
 
 SYSTEM_RAG = """You are a helpful assistant.
 Answer using ONLY the provided context. If the context does not contain the answer, say:
