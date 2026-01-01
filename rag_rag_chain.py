@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple, Optional
 
-from rag_llm import chat_completion
+from rag_llm import generate_answer as chat_completion
 from rag_vectorstore import query_similar
 
 # Tune this:
@@ -63,7 +63,7 @@ def rag_answer(question: str, k: int = 4) -> Tuple[str, List[Dict]]:
 
     # If distance is too large => not relevant => general answer and no sources
     if best_distance > RAG_DISTANCE_THRESHOLD:
-        answer = chat_completion(system=SYSTEM_GENERAL, user=question)
+        answer = chat_completion(f"{SYSTEM_GENERAL}\n\nUser:\n{question}")
         return answer, []
 
     # Otherwise use RAG
