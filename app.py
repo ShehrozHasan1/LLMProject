@@ -2,10 +2,10 @@ import os
 import uuid
 import streamlit as st
 
-from rag_config import UPLOADS_DIR, DATA_DIR, CHUNK_SIZE, CHUNK_OVERLAP
+from rag_config import UPLOADS_DIR, DATA_DIR, CHUNK_SIZE, CHUNK_OVERLAP, PROJECT_DIR
 from rag_document_loaders import load_document
 from rag_chunking import chunk_text
-from rag_vectorstore import upsert_chunks
+from rag_vectorstore import upsert_chunks, get_doc_count
 from rag_rag_chain import rag_answer
 
 st.set_page_config(page_title="Company RAG Chatbot (Perplexity)", layout="wide")
@@ -13,8 +13,11 @@ st.set_page_config(page_title="Company RAG Chatbot (Perplexity)", layout="wide")
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 
-st.title("Chatbot by Muhammad Shehroz")
+st.title("Company RAG Chatbot — Perplexity API (RAG)")
 
+# -----------------------------
+# AUTO-INGEST (from repo PDF)
+# -----------------------------
 DEFAULT_PDF_NAME = "Company-Profile.pdf"
 DEFAULT_PDF_PATH = os.path.join(PROJECT_DIR, DEFAULT_PDF_NAME)
 
