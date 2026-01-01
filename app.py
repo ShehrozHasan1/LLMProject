@@ -66,7 +66,7 @@ for m in st.session_state.messages:
     with st.chat_message(m["role"]):
         st.markdown(m["content"])
 
-question = st.chat_input("Ask a question about the company documents...")
+question = st.chat_input("Write your querry...")
 if question:
     st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("user"):
