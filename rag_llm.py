@@ -4,10 +4,10 @@ from rag_config import PERPLEXITY_API_KEY, PERPLEXITY_MODEL
 
 def generate_answer(prompt: str) -> str:
     """
-    Calls Perplexity API using the chat completions endpoint.
+    Calls Perplexity API using a single combined prompt (kept for compatibility).
     """
     if not PERPLEXITY_API_KEY:
-        raise ValueError("PERPLEXITY_API_KEY is missing. Add it to .env")
+        raise ValueError("PERPLEXITY_API_KEY is missing. Add it to Streamlit Secrets.")
 
     url = "https://api.perplexity.ai/chat/completions"
     headers = {
@@ -33,16 +33,7 @@ def generate_answer(prompt: str) -> str:
 
 def chat_completion(system: str, user: str) -> str:
     """
-    Small wrapper used by rag_rag_chain.py.
-    We combine system + user into one prompt to keep your current API style.
-    """
-    prompt = f"System:\n{system}\n\nUser:\n{user}"
-    return generate_answer(prompt)
-
-def chat_completion(system: str, user: str) -> str:
-    """
-    Wrapper used by rag_rag_chain.py.
-    Sends a normal chat-style request with system + user messages.
+    Used by rag_rag_chain.py for Hybrid RAG (system + user messages).
     """
     if not PERPLEXITY_API_KEY:
         raise ValueError("PERPLEXITY_API_KEY is missing. Add it to Streamlit Secrets.")
@@ -66,6 +57,3 @@ def chat_completion(system: str, user: str) -> str:
     r.raise_for_status()
     data = r.json()
     return (data["choices"][0]["message"]["content"] or "").strip()
-
-# DEBUG: prove what functions exist
-__ALL_FUNCS__ = [name for name in globals().keys() if "chat" in name or "generate" in name]
