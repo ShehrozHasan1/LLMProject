@@ -66,3 +66,6 @@ def chat_completion(system: str, user: str) -> str:
     r.raise_for_status()
     data = r.json()
     return (data["choices"][0]["message"]["content"] or "").strip()
+
+# DEBUG: prove what functions exist
+__ALL_FUNCS__ = [name for name in globals().keys() if "chat" in name or "generate" in name]
