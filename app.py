@@ -13,7 +13,7 @@ st.set_page_config(page_title="RAG Chatbot", layout="wide")
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 
-st.title("Chatbot by Muhammad Shehroz")
+st.title("Chatbot by Muhammad Shehroz.")
 
 # -----------------------------
 # AUTO-INGEST (from repo PDF)
