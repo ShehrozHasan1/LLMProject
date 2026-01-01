@@ -18,10 +18,7 @@ def generate_answer(prompt: str) -> str:
     payload = {
         "model": PERPLEXITY_MODEL,
         "messages": [
-            {
-                "role": "system",
-                "content": "Follow the user's instructions carefully.",
-            },
+            {"role": "system", "content": "Follow the user's instructions carefully."},
             {"role": "user", "content": prompt},
         ],
         "temperature": 0.2,
@@ -32,3 +29,12 @@ def generate_answer(prompt: str) -> str:
     data = r.json()
 
     return (data["choices"][0]["message"]["content"] or "").strip()
+
+
+def chat_completion(system: str, user: str) -> str:
+    """
+    Small wrapper used by rag_rag_chain.py.
+    We combine system + user into one prompt to keep your current API style.
+    """
+    prompt = f"System:\n{system}\n\nUser:\n{user}"
+    return generate_answer(prompt)
