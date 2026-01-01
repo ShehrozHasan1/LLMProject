@@ -8,12 +8,12 @@ from rag_chunking import chunk_text
 from rag_vectorstore import upsert_chunks, get_doc_count
 from rag_rag_chain import rag_answer
 
-st.set_page_config(page_title="Company RAG Chatbot (Perplexity)", layout="wide")
+st.set_page_config(page_title="RAG Chatbot", layout="wide")
 
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 
-st.title("Company RAG Chatbot — Perplexity API (RAG)")
+st.title("Chatbot by Muhammad Shehroz")
 
 # -----------------------------
 # AUTO-INGEST (from repo PDF)
@@ -54,14 +54,14 @@ if not st.session_state.auto_ingested:
         st.session_state.auto_ingested = True
 
 with st.sidebar:
-    st.header("Step 1: Upload file/documents (optional)")
+    st.header("Upload file/documents (optional)")
     uploaded_files = st.file_uploader(
         "Upload PDF or DOCX",
         type=["pdf", "docx"],
         accept_multiple_files=True,
     )
 
-    st.caption("Step 2: Click ingest to build/update (optional).")
+    st.caption("Click ingest to build/update (optional).")
 
     if st.button("Ingest uploaded documents"):
         if not uploaded_files:
@@ -80,7 +80,7 @@ with st.sidebar:
 
                 st.success(f"Ingestion completed. Stored {total_chunks} chunks in ChromaDB.")
 
-st.subheader("Step 3: Ask questions (uses your documents when relevant)")
+st.subheader("Ask Me Anything 😉")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -89,7 +89,7 @@ for m in st.session_state.messages:
     with st.chat_message(m["role"]):
         st.markdown(m["content"])
 
-question = st.chat_input("Ask a question about the company documents...")
+question = st.chat_input("Ask your querry here...")
 if question:
     st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("user"):
