@@ -15,15 +15,50 @@ os.makedirs(DATA_DIR, exist_ok=True)
 
 st.title("Chatbot by Muhammad Shehroz")
 
+DEFAULT_PDF_NAME = "Company-Profile.pdf"
+DEFAULT_PDF_PATH = os.path.join(PROJECT_DIR, DEFAULT_PDF_NAME)
+
+def ingest_file(path: str, display_name: str):
+    text, _ = load_document(path)
+    if not text.strip():
+        st.warning(f"No text extracted from: {display_name}")
+        return 0
+
+    base_meta = {"source": display_name, "page": None}
+    chunks, metas = chunk_text(
+        text=text,
+        base_metadata=base_meta,
+        chunk_size=CHUNK_SIZE,
+        overlap=CHUNK_OVERLAP,
+    )
+
+    ids = [f"{display_name}-{i+1}" for i in range(len(chunks))]
+    upsert_chunks(chunks, metas, ids)
+    return len(chunks)
+
+# Run once per session (not every rerun)
+if "auto_ingested" not in st.session_state:
+    st.session_state.auto_ingested = False
+
+if not st.session_state.auto_ingested:
+    existing = get_doc_count()
+    if existing == 0 and os.path.exists(DEFAULT_PDF_PATH):
+        with st.spinner(f"Auto-ingesting {DEFAULT_PDF_NAME} (first time setup)..."):
+            stored = ingest_file(DEFAULT_PDF_PATH, DEFAULT_PDF_NAME)
+        st.session_state.auto_ingested = True
+        st.success(f"Auto-ingest complete. Stored {stored} chunks.")
+    else:
+        st.session_state.auto_ingested = True
+
 with st.sidebar:
-    st.header("Step 1: Upload file/documents")
+    st.header("Step 1: Upload file/documents (optional)")
     uploaded_files = st.file_uploader(
         "Upload PDF or DOCX",
         type=["pdf", "docx"],
         accept_multiple_files=True,
     )
 
-    st.caption("Step 2: Click ingest to build/update.")
+    st.caption("Step 2: Click ingest to build/update (optional).")
 
     if st.button("Ingest uploaded documents"):
         if not uploaded_files:
@@ -38,26 +73,11 @@ with st.sidebar:
                     with open(save_path, "wb") as f:
                         f.write(uf.getbuffer())
 
-                    text, _ = load_document(save_path)
-                    if not text.strip():
-                        st.warning(f"No text extracted from: {uf.name}")
-                        continue
-
-                    base_meta = {"source": uf.name, "page": None}
-                    chunks, metas = chunk_text(
-                        text=text,
-                        base_metadata=base_meta,
-                        chunk_size=CHUNK_SIZE,
-                        overlap=CHUNK_OVERLAP,
-                    )
-
-                    ids = [f"{uf.name}-{i+1}" for i in range(len(chunks))]
-                    upsert_chunks(chunks, metas, ids)
-                    total_chunks += len(chunks)
+                    total_chunks += ingest_file(save_path, uf.name)
 
                 st.success(f"Ingestion completed. Stored {total_chunks} chunks in ChromaDB.")
 
-st.subheader("ASK Me Anything 😉")
+st.subheader("Step 3: Ask questions (answers come only from your documents)")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -66,7 +86,7 @@ for m in st.session_state.messages:
     with st.chat_message(m["role"]):
         st.markdown(m["content"])
 
-question = st.chat_input("Write your querry here...")
+question = st.chat_input("Ask a question about the company documents...")
 if question:
     st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("user"):
